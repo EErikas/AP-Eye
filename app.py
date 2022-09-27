@@ -85,4 +85,3 @@ def status():
 
 if __name__ == "__main__":
     app.run()
-    psutil.virtual_memory().percent
