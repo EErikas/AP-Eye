@@ -1,9 +1,9 @@
-import csv
 from os import path, mkdir
+from csv import writer as csv_writer
 from time import sleep
 from threading import Thread
+from psutil import cpu_percent, virtual_memory, net_io_counters, disk_io_counters
 from flask import Flask, jsonify, send_file
-import psutil
 
 ROOT_DIR = path.dirname(path.abspath(__file__))
 RESULT_DIR = path.join(ROOT_DIR, 'out')
@@ -12,7 +12,7 @@ run_process = False
 
 def write_data(data, filename):
     with open(filename, 'a') as outfile:
-        writer = csv.writer(outfile)
+        writer = csv_writer(outfile)
         writer.writerow(data)
 
 
@@ -21,14 +21,14 @@ def log_data(name):
     print(f'-> Logging started at {name}')
     while run_process:
         data = [
-            psutil.cpu_percent(),
-            psutil.virtual_memory().percent,
-            psutil.net_io_counters(pernic=False).bytes_sent,
-            psutil.net_io_counters(pernic=False).bytes_recv,
-            psutil.disk_io_counters(perdisk=False).read_count,
-            psutil.disk_io_counters(perdisk=False).write_count,
-            psutil.disk_io_counters(perdisk=False).read_bytes,
-            psutil.disk_io_counters(perdisk=False).write_bytes
+            cpu_percent(),
+            virtual_memory().percent,
+            net_io_counters(pernic=False).bytes_sent,
+            net_io_counters(pernic=False).bytes_recv,
+            disk_io_counters(perdisk=False).read_count,
+            disk_io_counters(perdisk=False).write_count,
+            disk_io_counters(perdisk=False).read_bytes,
+            disk_io_counters(perdisk=False).write_bytes
         ]
         write_data(data, name)
         sleep(1)
