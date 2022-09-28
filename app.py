@@ -1,4 +1,4 @@
-from os import path, mkdir
+from os import path, mkdir, listdir, remove
 from csv import writer as csv_writer
 from time import sleep
 from threading import Thread
@@ -41,11 +41,13 @@ app = Flask(__name__)
 @app.route('/start/<string:name>')
 def start(name: str):
     global run_process
+    if run_process:
+        return jsonify(error='already running')
     run_process = True
     if not path.exists(RESULT_DIR):
         mkdir(RESULT_DIR)
-    destination_file = path.join(RESULT_DIR, f'{name}.csv')
-    if not path.exists(destination_file):
+    file = path.join(RESULT_DIR, f'{name}.csv')
+    if not path.exists(file):
         header = [
             'cpu_usage',
             'ram_usage',
@@ -56,8 +58,8 @@ def start(name: str):
             'disk_read_bytes',
             'disk_write_bytes'
         ]
-        write_data(header, destination_file)
-    daemon = Thread(target=log_data, args=(destination_file,))
+        write_data(header, file)
+    daemon = Thread(target=log_data, args=(file,))
     daemon.start()
     return jsonify(logging='started')
 
@@ -83,5 +85,16 @@ def status():
     return jsonify(logging='ongoing' if run_process else 'stopped')
 
 
+@app.route('/clean')
+def clean():
+    global run_process
+    if run_process:
+        return jsonify(error='logging is ongoing')
+    files = [path.join(RESULT_DIR,f) for f in listdir(RESULT_DIR)]
+    for file in [f for f in files if path.isfile(f)]:
+        remove(file)
+    return jsonify(logging='logs removed')
+
+
 if __name__ == "__main__":
-    app.run()
+    app.run(host='0.0.0.0', port=5000)
