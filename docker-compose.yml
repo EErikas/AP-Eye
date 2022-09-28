@@ -1,7 +1,7 @@
 version: '3.4'
 services:
   server:
-    build: .
+    image: eerikas/resmon:latest
     ports:
     - '5000:5000'
     volumes:

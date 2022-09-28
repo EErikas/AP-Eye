@@ -1,7 +1,22 @@
 # ResMon
 Resource Monitoring application with API endpoints to start and stop logging system load. Great for testing system loads in specific scenarios
 
-All files are saved to `out` folder in project root directory
+All files are saved to `out` folder in the project root directory
+## Launch methods
+There are several ways to launch the application
+### From source code
+To launch from the source code, make sure you have `Python 3.9` installed and do the following commands:
+```bash
+pip install -r requirements.txt
+python app.py
+```
+### Using Docker
+Official Docker image can be pulled by using this command
+```bash
+docker pull eerikas/resmon
+```
+It's best to use `docker compose` for easiest deployments, the example can be seen in the `docker-compose.yml` file.
+
 ## Endpoints
 * `/start/<name>`: Starts logging to a file that is called `<name>.csv`
   
@@ -13,7 +28,7 @@ All files are saved to `out` folder in project root directory
     ```json
     {"error": "already running"}
     ```
-* `/stop`: Stops logging process, returns response
+* `/stop`: Stops the logging process, returns the response
   ```json
   {"logging": "stopped"}
   ```
