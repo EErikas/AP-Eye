@@ -1,5 +1,7 @@
-# Stored in Docker Hub as eerikas/resmon
-FROM python:3.9
+FROM python:3.9.18-alpine
+# Upgrade pip and setuptools to fix 
+# CVE-2022-40897 and CVE-2023-5752 vulnerabilities⁠
+RUN pip install --upgrade pip setuptools
 WORKDIR /app
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt

@@ -13,7 +13,7 @@ python app.py
 ### Using Docker
 Official Docker image can be pulled by using this command
 ```bash
-docker pull eerikas/resmon
+docker pull ghcr.io/eerikas/resmon
 ```
 It's best to use `docker compose` for easiest deployments, the example can be seen in the `docker-compose.yml` file.
 
